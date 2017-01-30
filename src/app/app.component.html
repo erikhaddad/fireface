@@ -1,4 +1,4 @@
-<div class="picker-wrapper" fxFlex fxLayout="row">
+<div id="picker-wrapper" fxFlex fxLayout="row">
   <aside class="picker" fxFlex="30" fxLayout="column">
     <div class="picker-gender" fxLayout="row" fxLayoutAlign="center center">
       <button md-button attr.aria-label="Male Set" (click)="setSelectedGender('male')">
@@ -8,13 +8,14 @@
         <md-icon svgIcon="avatar:svg-6" [ngClass]="{'selected': selectedGender=='female'}"></md-icon>
       </button>
     </div>
+
     <div class="tabs-wrapper" fxFlex>
       <md-tab-group [selectedIndex]="selectedTabIndex" md-dynamic-height md-border-bottom md-autoselect>
         <md-tab label="Colors">
           <div class="demo-tab tab" style="padding: 25px; text-align: center;">
             <md-grid-list cols="3" gutterSize="12px">
               <md-grid-tile class="tile-border tile-background"
-                            *ngFor="let color of colors"
+                            *ngFor="let color of COLORS"
                             rowspan="1" colspan="1">
                 <button md-button class="asset-button" (click)="setConfigValue('color', color.value)"
                         attr.aria-label="{{ color.title }}" [ngStyle]="{'background-color': color.value}">
@@ -27,19 +28,20 @@
             </md-grid-list>
           </div>
         </md-tab>
-        <md-tab label="{{ sets[key].title }}"
+
+        <md-tab label="{{ SETS[key].title }}"
                 *ngFor="let key of setsKeys"
                 [ngClass]="{'hidden': (selectedGender=='female' && key=='facialhair')}">
           <div class="demo-tab tab{{ $index % 4 }}" style="padding: 25px; text-align: center;">
             <md-grid-list cols="3" gutterSize="12px">
               <md-grid-tile class="tile-border tile-background"
-                            *ngFor="let asset of sets[key][selectedGender]"
+                            *ngFor="let asset of SETS[key][selectedGender]"
                             rowspan="1" colspan="1">
 
                 <button md-button class="asset-button"
-                        [attr.aria-label]="sets[key].title"
+                        [attr.aria-label]="SETS[key].title"
                         (click)="setConfigValue(key, asset)">
-                  <img class="asset-icon" [ngClass]="{'hidden': asset==null}" [src]="'../assets/images/'+asset" />
+                  <img class="asset-icon" *ngIf="asset!=null" [src]="'../assets/images/'+asset" />
                   <md-icon class="asset-icon-none" *ngIf="asset==null">not_interested</md-icon>
                 </button>
 
@@ -53,13 +55,16 @@
       </md-tab-group>
     </div>
   </aside>
-  <main fxFlex fxLayout="column" fxLayoutAlign="center center" style="background-color: rgba(0,0,0,.1)">
+
+  <main class="output" fxFlex fxLayout="column" fxLayoutAlign="center center">
     <div id="avatar">
       <div class="avatar-color" [ngStyle]="{'background-color': config.color}" *ngIf="config.color!=null"></div>
-      <img class="avatar-image"
-           *ngFor="let key of setsKeys"
-           [src]="'../assets/images/'+config[key]"
-           [ngClass]="{'hidden': config[key]==null}" />
+
+      <div class="avatar-asset" *ngFor="let key of setsKeys">
+        <img class="avatar-image"
+             *ngIf="config[key]!=null"
+             [src]="'../assets/images/'+config[key]" />
+      </div>
     </div>
 
     <div id="download" fxLayout="row">

@@ -1,9 +1,25 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation, Input} from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
 import {MdIconRegistry} from '@angular/material';
 
+import * as html2canvas from "html2canvas";
 import * as _ from "lodash";
 import 'rxjs/add/observable/throw';
+
+export interface Color {
+    title: string,
+    value: string
+}
+export interface Assets {
+    face,
+    clothes,
+    eyes,
+    hair,
+    facialhair,
+    hat,
+    neck,
+    ears
+}
 
 @Component({
     selector: 'app-root',
@@ -12,13 +28,14 @@ import 'rxjs/add/observable/throw';
     encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnInit {
-    title = 'app works!';
 
-    selectedTabIndex = 0;
+    @Input()
+    selectedTabIndex:number;
 
-    selectedGender:string = "male";
+    @Input()
+    selectedGender:string;
 
-    sets = {
+    SETS = {
         face: {
             title: "Face",
             female: [
@@ -92,6 +109,7 @@ export class AppComponent implements OnInit {
         hair: {
             title: "Hair",
             female: [
+                null,
                 "ic_hair-thin-01.svg",
                 "ic_hair-thin-02.svg",
                 "ic_hair-thin-03.svg",
@@ -101,6 +119,7 @@ export class AppComponent implements OnInit {
                 "ic_hair-thin-07.svg"
             ],
             male: [
+                null,
                 "ic_hair-wide-01.svg",
                 "ic_hair-wide-02.svg",
                 "ic_hair-wide-03.svg",
@@ -181,7 +200,7 @@ export class AppComponent implements OnInit {
 
     setsKeys: string[];
 
-    colors = [
+    COLORS = [
         {
             title: "White",
             value: "#FFFFFF"
@@ -267,17 +286,26 @@ export class AppComponent implements OnInit {
     imageData = "#";
 
     config = {
-        color: this.colors[0].value
+        color: this.COLORS[0].value
     };
 
-    constructor(iconRegistry: MdIconRegistry, sanitizer: DomSanitizer) {
+    constructor(iconRegistry: MdIconRegistry, private sanitizer: DomSanitizer) {
+        this.selectedTabIndex = 0;
+        this.selectedGender = "male";
+
         iconRegistry.addSvgIconSetInNamespace(
             'avatar',
             sanitizer.bypassSecurityTrustResourceUrl('../assets/icons/avatar-icons.svg'));
     }
 
     setConfigValue(key, val) {
-        //this.config[key] = null; // Triggers ngIf animation (albeit short)
+        /*
+        if (val != null) {
+            this.config[key] = val;
+        } else {
+            console.log('ignoring '+val+' value for '+key);
+        }
+        */
 
         this.config[key] = val;
 
@@ -285,11 +313,11 @@ export class AppComponent implements OnInit {
     }
 
     renderRandom() {
-        this.config.color = this.colors[this.randIndex(this.colors)].value;
+        this.config.color = this.COLORS[this.randIndex(this.COLORS)].value;
 
         for (let k = 0; k < this.setsKeys.length; k++) {
             let key = this.setsKeys[k];
-            this.addAssetRandom(key, this.sets[key][this.selectedGender]);
+            this.addAssetRandom(key, this.SETS[key][this.selectedGender]);
         }
 
         this.updateImageData();
@@ -305,6 +333,35 @@ export class AppComponent implements OnInit {
                 });
         }, 2000);
         */
+        /*
+        if (typeof html2canvas !== 'undefined') {
+            let that = this;
+            //setInterval(function () {
+                html2canvas(document.getElementById('avatar'))
+                    .then(function (canvas) {
+                        that.imageData = canvas.toDataURL('image/png');
+                        //console.log('image data', this.imageData);
+                        (document.getElementById('save') as HTMLAnchorElement).href = canvas.toDataURL('image/png');
+                    });
+            //}, 2000);
+        }
+        */
+
+        console.log('state of config', this.config);
+
+        if (typeof html2canvas !== 'undefined') {
+            let that = this;
+            setTimeout(function () {
+                html2canvas(document.getElementById('avatar'))
+                    .then(function (canvas) {
+                        that.imageData = canvas.toDataURL('image/png');
+
+                        console.log('new image data', that.imageData);
+
+                        (document.getElementById('save') as HTMLAnchorElement).href = canvas.toDataURL('image/png');
+                    });
+            }, 2000);
+        }
     }
 
     addAssetRandom(key, list) {
@@ -336,17 +393,17 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.setsKeys = _.keys(this.sets);
+        this.setsKeys = _.keys(this.SETS);
 
-        // sets defaults
+        // SETS defaults
         for (let k = 0; k < this.setsKeys.length; k++) {
             let key = this.setsKeys[k];
-            let value = this.sets[key][this.selectedGender][0];
+            let value = this.SETS[key][this.selectedGender][0];
 
             this.setConfigValue(key, value);
         }
 
-        // sets random values
+        // SETS random values
         this.renderRandom();
     }
 }
