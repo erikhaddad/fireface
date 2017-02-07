@@ -5,12 +5,14 @@ import {MdIconRegistry} from '@angular/material';
 import * as html2canvas from "html2canvas";
 import * as _ from "lodash";
 import 'rxjs/add/observable/throw';
+import {Avatar} from "../common/avatar.model";
 
-export interface Color {
+export interface IColor {
     title: string,
     value: string
 }
-export interface Assets {
+
+export interface IAssets {
     face,
     clothes,
     eyes,
@@ -29,11 +31,17 @@ export interface Assets {
 })
 export class CreateComponent implements OnInit {
 
-    @Input()
-    selectedTabIndex:number;
+    currentAvatar: Avatar;
 
     @Input()
-    selectedGender:string;
+    selectedTabIndex: number;
+
+    @Input()
+    selectedGender: string;
+
+    setsKeys: string[];
+    intervalPromise: number|null;
+    imageData: string;
 
     SETS = {
         face: {
@@ -198,9 +206,7 @@ export class CreateComponent implements OnInit {
         }
     };
 
-    setsKeys: string[];
-
-    COLORS = [
+    COLORS: IColor[] = [
         {
             title: "White",
             value: "#FFFFFF"
@@ -283,37 +289,44 @@ export class CreateComponent implements OnInit {
         }
     ];
 
-    imageData = "#";
-
-    config = {
-        color: this.COLORS[0].value
-    };
-
     constructor(iconRegistry: MdIconRegistry, private sanitizer: DomSanitizer) {
+        this.currentAvatar = new Avatar();
+
+        this.setsKeys = _.keys(this.SETS);
+
         this.selectedTabIndex = 0;
-        this.selectedGender = "male";
+        this.selectedGender = this.currentAvatar.gender = "male";
+        this.currentAvatar.color = this.COLORS[0].value;
+
+        this.intervalPromise = null;
+        this.imageData = "#";
 
         iconRegistry.addSvgIconSetInNamespace(
             'avatar',
             sanitizer.bypassSecurityTrustResourceUrl('../assets/icons/avatar-icons.svg'));
     }
 
-    setConfigValue(key, val) {
-        /*
-        if (val != null) {
-            this.config[key] = val;
-        } else {
-            console.log('ignoring '+val+' value for '+key);
-        }
-        */
+    ngOnInit() {
+        // SETS defaults
+        for (let k = 0; k < this.setsKeys.length; k++) {
+            let key = this.setsKeys[k];
+            let value = this.SETS[key][this.selectedGender][0];
 
-        this.config[key] = val;
+            this.setConfigValue(key, value);
+        }
+
+        // SETS random values
+        this.renderRandom();
+    }
+
+    setConfigValue(key:string, val:string|null) {
+        this.currentAvatar[key] = val;
 
         this.updateImageData();
     }
 
-    renderRandom() {
-        this.config.color = this.COLORS[this.randIndex(this.COLORS)].value;
+    renderRandom(): void {
+        this.currentAvatar.color = this.COLORS[this.randIndex(this.COLORS)].value;
 
         for (let k = 0; k < this.setsKeys.length; k++) {
             let key = this.setsKeys[k];
@@ -323,31 +336,8 @@ export class CreateComponent implements OnInit {
         this.updateImageData();
     }
 
-    updateImageData() {
-        /*
-        setInterval(function () {
-            html2canvas(document.querySelector('#avatar'))
-                .then(function (canvas) {
-                    this.imageData = this.sanitizer.bypassSecurityTrustResourceUrl(canvas.toDataURL('image/png'));
-                    document.querySelector('#save').href = canvas.toDataURL('image/png');
-                });
-        }, 2000);
-        */
-        /*
-        if (typeof html2canvas !== 'undefined') {
-            let that = this;
-            //setInterval(function () {
-                html2canvas(document.getElementById('avatar'))
-                    .then(function (canvas) {
-                        that.imageData = canvas.toDataURL('image/png');
-                        //console.log('image data', this.imageData);
-                        (document.getElementById('save') as HTMLAnchorElement).href = canvas.toDataURL('image/png');
-                    });
-            //}, 2000);
-        }
-        */
-
-        console.log('state of config', this.config);
+    updateImageData(): void {
+        console.log('state of currentAvatar', this.currentAvatar);
 
         if (typeof html2canvas !== 'undefined') {
             let that = this;
@@ -356,7 +346,7 @@ export class CreateComponent implements OnInit {
                     .then(function (canvas) {
                         that.imageData = canvas.toDataURL('image/png');
 
-                        console.log('new image data', that.imageData);
+                        //console.log('new image data', that.imageData);
 
                         (document.getElementById('save') as HTMLAnchorElement).href = canvas.toDataURL('image/png');
                     });
@@ -365,14 +355,12 @@ export class CreateComponent implements OnInit {
     }
 
     addAssetRandom(key, list) {
-        this.config[key] = list[this.randIndex(list)];
+        this.currentAvatar[key] = list[this.randIndex(list)];
     }
 
     randIndex(list) {
         return Math.floor(Math.random() * list.length);
     }
-
-    intervalPromise = null;
 
     autoShuffle() {
         if (this.intervalPromise) {
@@ -384,26 +372,12 @@ export class CreateComponent implements OnInit {
         }
     }
 
-    setSelectedGender(gender) {
+    setSelectedGender(gender:string) {
         if (this.selectedGender != gender) {
             this.selectedGender = gender;
+            this.currentAvatar.gender = gender;
 
             this.renderRandom();
         }
-    }
-
-    ngOnInit() {
-        this.setsKeys = _.keys(this.SETS);
-
-        // SETS defaults
-        for (let k = 0; k < this.setsKeys.length; k++) {
-            let key = this.setsKeys[k];
-            let value = this.SETS[key][this.selectedGender][0];
-
-            this.setConfigValue(key, value);
-        }
-
-        // SETS random values
-        this.renderRandom();
     }
 }

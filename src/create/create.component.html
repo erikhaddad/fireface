@@ -21,7 +21,7 @@
                         attr.aria-label="{{ color.title }}" [ngStyle]="{'background-color': color.value}">
 
                 </button>
-                <md-grid-tile-footer *ngIf="config.color==color.value" fxLayout="row" fxLayoutAlign="center center">
+                <md-grid-tile-footer *ngIf="currentAvatar.color==color.value" fxLayout="row" fxLayoutAlign="center center">
                   <md-icon class="selected-icon">check_circle</md-icon>
                 </md-grid-tile-footer>
               </md-grid-tile>
@@ -45,7 +45,7 @@
                   <md-icon class="asset-icon-none" *ngIf="asset==null">not_interested</md-icon>
                 </button>
 
-                <md-grid-tile-footer *ngIf="config[key]==asset" fxLayout="row" fxLayoutAlign="center center">
+                <md-grid-tile-footer *ngIf="currentAvatar[key]==asset" fxLayout="row" fxLayoutAlign="center center">
                   <md-icon class="selected-icon" style="color: white">check_circle</md-icon>
                 </md-grid-tile-footer>
               </md-grid-tile>
@@ -58,12 +58,12 @@
 
   <article class="output" fxFlex fxLayout="column" fxLayoutAlign="center center">
     <div id="avatar">
-      <div class="avatar-color" [ngStyle]="{'background-color': config.color}" *ngIf="config.color!=null"></div>
+      <div class="avatar-color" [ngStyle]="{'background-color': currentAvatar.color}" *ngIf="currentAvatar.color!=null"></div>
 
       <div class="avatar-asset" *ngFor="let key of setsKeys">
         <img class="avatar-image"
-             *ngIf="config[key]!=null"
-             [src]="'../assets/images/'+config[key]" />
+             *ngIf="currentAvatar[key]!=null"
+             [src]="'../assets/images/'+currentAvatar[key]" />
       </div>
     </div>
 
