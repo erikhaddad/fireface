@@ -8,11 +8,14 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue.
-$fireface-app-primary: md-palette($md-teal, 100, 300, A100);
-$fireface-app-accent:  md-palette($md-cyan, 100, 300, A100);
+//$fireface-app-primary: md-palette($md-teal, 100, 300, A100);
+//$fireface-app-accent: md-palette($md-cyan, 100, 300, A100);
+
+$fireface-app-primary: md-palette($md-deep-purple, 500, 700, 800);
+$fireface-app-accent: md-palette($md-green, A200, 300, 500);
 
 // The warn palette is optional (defaults to red).
-$fireface-app-warn:    md-palette($md-red);
+$fireface-app-warn: md-palette($md-red);
 
 // Create the theme object (a Sass map containing all of the palettes).
 $fireface-app-theme: md-light-theme($fireface-app-primary, $fireface-app-accent, $fireface-app-warn);

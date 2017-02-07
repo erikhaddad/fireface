@@ -15,7 +15,7 @@
       "../node_modules/@types"
     ],
     "types": [
-      "html2canvas"
+      "html2canvas", "firebase"
     ]
   }
 }

@@ -1,0 +1,11 @@
+<div class="gallery">
+  <h1>Gallery of Avatars</h1>
+  <div class="avatars-grid" *ngIf="allAvatars.length > 0">
+    <h2>Number of avatars: {{ allAvatars.length }}</h2>
+    <div *ngFor="let avatar of allAvatars | async">{{ avatar.title }}</div>
+  </div>
+  <div class="avatars-empty" *ngIf="!allAvatars.length" fxLayout="column" fxLayoutAlign="center center">
+    <img class="placeholder" src="/assets/images/gallery-placeholder.gif" />
+  </div>
+</div>
+<a id="gallery-fab" md-fab routerLink="/create"><md-icon>add</md-icon></a>
