@@ -9,20 +9,20 @@ import {IAvatar, Avatar} from './avatar.model';
 
 @Injectable()
 export class AvatarService {
-    private _allAvatars$: FirebaseListObservable<IAvatar[]>;
+    private _publicAvatars$: FirebaseListObservable<IAvatar[]>;
     private _userAvatars$: FirebaseListObservable<IAvatar[]>;
 
     constructor(af: AngularFire, auth: AuthService) {
-        const allAvatarsPath = `/avatars`;
-        this._allAvatars$ = af.database.list(allAvatarsPath);
+        const publicAvatarsPath = `/avatars`;
+        this._publicAvatars$ = af.database.list(publicAvatarsPath);
 
         const userAvatarsPath = `/users/${auth.id}/avatars`;
         this._userAvatars$ = af.database.list(userAvatarsPath);
     }
 
 
-    get allAvatars(): FirebaseListObservable<IAvatar[]> {
-        return this._allAvatars$;
+    get publicAvatars(): FirebaseListObservable<IAvatar[]> {
+        return this._publicAvatars$;
     }
 
     get userAvatars(): FirebaseListObservable<IAvatar[]> {
@@ -30,21 +30,21 @@ export class AvatarService {
     }
 
     /** PUBLIC EVENTS **/
-    createPublicAvatar(title: string, datetime: string, image: string): firebase.Promise<any> {
-        return this._allAvatars$.push(new Avatar(title, datetime, image));
+    createPublicAvatar(avatar:Avatar): firebase.Promise<any> {
+        return this._publicAvatars$.push(avatar);
     }
 
     removePublicAvatar(avatar: IAvatar): firebase.Promise<any> {
-        return this._allAvatars$.remove(avatar.$key);
+        return this._publicAvatars$.remove(avatar.$key);
     }
 
     updatePublicAvatar(avatar: IAvatar, changes: any): firebase.Promise<any> {
-        return this._allAvatars$.update(avatar.$key, changes);
+        return this._publicAvatars$.update(avatar.$key, changes);
     }
 
     /** USER-CENTRIC EVENTS **/
-    createUserAvatar(title: string, datetime: string, image: string): firebase.Promise<any> {
-        return this._userAvatars$.push(new Avatar(title, datetime, image));
+    createUserAvatar(avatar:Avatar): firebase.Promise<any> {
+        return this._userAvatars$.push(avatar);
     }
 
     removeUserAvatar(avatar: IAvatar): firebase.Promise<any> {

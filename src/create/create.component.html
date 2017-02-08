@@ -71,7 +71,7 @@
       <a md-button id="save" attr.aria-label="Save" download="avatar.png" [href]="imageData">
         <md-icon>save</md-icon> Save
       </a>
-      <a md-button id="upload" attr.aria-label="Upload">
+      <a md-button id="upload" attr.aria-label="Upload" (click)="uploadAvatar($event)">
         <md-icon>cloud_upload</md-icon> Upload
       </a>
       <button md-button id="repeat" attr.aria-label="Shuffle" (click)="renderRandom()">

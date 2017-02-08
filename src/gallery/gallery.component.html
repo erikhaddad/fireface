@@ -1,10 +1,10 @@
 <div class="gallery">
   <h1>Gallery of Avatars</h1>
-  <div class="avatars-grid" *ngIf="allAvatars.length > 0">
-    <h2>Number of avatars: {{ allAvatars.length }}</h2>
-    <div *ngFor="let avatar of allAvatars | async">{{ avatar.title }}</div>
+  <div class="avatars-grid" *ngIf="publicAvatars.length > 0">
+    <h2>Number of avatars: {{ publicAvatars.length }}</h2>
+    <div *ngFor="let avatar of publicAvatars | async">{{ avatar.title }}</div>
   </div>
-  <div class="avatars-empty" *ngIf="!allAvatars.length" fxLayout="column" fxLayoutAlign="center center">
+  <div class="avatars-empty" *ngIf="!publicAvatars.length" fxLayout="column" fxLayoutAlign="center center">
     <img class="placeholder" src="/assets/images/gallery-placeholder.gif" />
   </div>
 </div>

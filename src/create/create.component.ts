@@ -6,6 +6,7 @@ import * as html2canvas from "html2canvas";
 import * as _ from "lodash";
 import 'rxjs/add/observable/throw';
 import {Avatar} from "../common/avatar.model";
+import {AvatarService} from "../common/avatar.service";
 
 export interface IColor {
     title: string,
@@ -289,7 +290,7 @@ export class CreateComponent implements OnInit {
         }
     ];
 
-    constructor(iconRegistry: MdIconRegistry, private sanitizer: DomSanitizer) {
+    constructor(iconRegistry: MdIconRegistry, private sanitizer: DomSanitizer, private avatarService: AvatarService) {
         this.currentAvatar = new Avatar();
 
         this.setsKeys = _.keys(this.SETS);
@@ -344,25 +345,29 @@ export class CreateComponent implements OnInit {
             setTimeout(function () {
                 html2canvas(document.getElementById('avatar'))
                     .then(function (canvas) {
-                        that.imageData = canvas.toDataURL('image/png');
+                        (document.getElementById('save') as HTMLAnchorElement).href = that.imageData = canvas.toDataURL('image/png');
 
                         //console.log('new image data', that.imageData);
-
-                        (document.getElementById('save') as HTMLAnchorElement).href = canvas.toDataURL('image/png');
                     });
             }, 2000);
         }
     }
 
-    addAssetRandom(key, list) {
+    uploadAvatar(): void {
+        // For demo, upload all to public, user-specific, and Firebase storage
+        this.avatarService.createPublicAvatar(this.currentAvatar);
+        this.avatarService.createUserAvatar(this.currentAvatar);
+    }
+
+    addAssetRandom(key, list): void {
         this.currentAvatar[key] = list[this.randIndex(list)];
     }
 
-    randIndex(list) {
+    randIndex(list): number {
         return Math.floor(Math.random() * list.length);
     }
 
-    autoShuffle() {
+    autoShuffle(): void {
         if (this.intervalPromise) {
             clearInterval(this.intervalPromise);
             this.intervalPromise = null;

@@ -2,7 +2,7 @@ export interface IAvatar {
     $key?: string;
 
     createdAt: number;
-    title: string;
+    author: string;
     image?: string;
 
     gender: string;
@@ -19,7 +19,7 @@ export interface IAvatar {
 
 export class Avatar implements IAvatar {
     private _createdAt: number;
-    private _title: string;
+    private _author: string;
     private _image: string;
 
     private _gender: string;
@@ -45,11 +45,11 @@ export class Avatar implements IAvatar {
         this._createdAt = value;
     }
 
-    get title(): string {
-        return this._title;
+    get author(): string {
+        return this._author;
     }
-    set title(value: string) {
-        this._title = value;
+    set author(value: string) {
+        this._author = value;
     }
 
     get image(): string {

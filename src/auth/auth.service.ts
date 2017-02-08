@@ -4,16 +4,59 @@ import UserInfo = firebase.UserInfo;
 
 @Injectable()
 export class AuthService {
-    private authState: FirebaseAuthState = null;
+    private _authState: FirebaseAuthState;
+    private _userInfo: UserInfo;
 
     constructor(public auth$: AngularFireAuth) {
+        this.authState = null;
+        this.userInfo = null;
+
+        let that = this;
         auth$.subscribe((state: FirebaseAuthState) => {
             this.authState = state;
+
+            if (this.authState !== null) {
+                switch (state.provider) {
+                    case AuthProviders.Google:
+                        that.userInfo = state.google;
+                        break;
+
+                    case AuthProviders.Facebook:
+                        that.userInfo = state.facebook;
+                        break;
+
+                    case AuthProviders.Twitter:
+                        that.userInfo = state.twitter;
+                        break;
+
+                    case AuthProviders.Github:
+                        that.userInfo = state.github;
+                        break;
+                }
+            }
         });
     }
 
+
+    get authState(): FirebaseAuthState {
+        return this._authState;
+    }
+
+    set authState(value: FirebaseAuthState) {
+        this._authState = value;
+    }
+
+    get userInfo(): UserInfo {
+        return this._userInfo;
+    }
+
+    set userInfo(value: UserInfo) {
+        this._userInfo = value;
+    }
+
+
     get authenticated(): boolean {
-        return this.authState !== null;
+        return this._authState !== null;
     }
 
     get id(): string {
@@ -22,32 +65,6 @@ export class AuthService {
 
     get state(): FirebaseAuthState|null {
         return this.authenticated ? this.authState : null;
-    }
-
-    get userInfo(): UserInfo {
-        let info:UserInfo;
-
-        if (this.authenticated) {
-            switch (this.state.provider) {
-                case AuthProviders.Google:
-                    info = this.state.google;
-                    break;
-
-                case AuthProviders.Facebook:
-                    info = this.state.facebook;
-                    break;
-
-                case AuthProviders.Twitter:
-                    info = this.state.twitter;
-                    break;
-
-                case AuthProviders.Github:
-                    info = this.state.github;
-                    break;
-            }
-        }
-
-        return info;
     }
 
     signIn(provider: number): firebase.Promise<FirebaseAuthState> {

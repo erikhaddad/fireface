@@ -1,15 +1,19 @@
 {
   "rules": {
+    "admin": {
+      ".read": true,
+      ".write": "auth != null && auth.uid === 'sswKqoKoUga7528m8HVc2ahPyDw2'"
+    },
     "avatars": {
       ".read": true,
-      ".write": "auth != null && auth.uid === 'inpZRUkiEIXaCFnsDOVGLpUUtHl2'"
+      ".write": true
     },
     "users": {
       "$uid": {
         ".read": "auth !== null && auth.uid === $uid",
         ".write": "auth !== null && auth.uid === $uid",
         ".indexOn": [
-          "datetime"
+          "createdAt"
         ]
       }
     }

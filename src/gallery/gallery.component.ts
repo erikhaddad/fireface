@@ -11,14 +11,14 @@ import {AvatarService} from '../common/avatar.service';
     encapsulation: ViewEncapsulation.None
 })
 export class GalleryComponent implements OnInit {
-    allAvatars: FirebaseListObservable<IAvatar[]>;
+    publicAvatars: FirebaseListObservable<IAvatar[]>;
     userAvatars: FirebaseListObservable<IAvatar[]>;
 
     constructor(avatarService: AvatarService) {
-        this.allAvatars = avatarService.allAvatars;
+        this.publicAvatars = avatarService.publicAvatars;
         this.userAvatars = avatarService.userAvatars;
 
-        console.log('all avatars', this.allAvatars);
+        console.log('all avatars', this.publicAvatars);
     }
 
     ngOnInit() {}
