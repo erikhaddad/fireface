@@ -9,6 +9,7 @@ import {AuthGuard} from '../auth/auth.module';
 
 import {GalleryComponent} from './gallery.component';
 import {AvatarService} from '../common/avatar.service';
+import {AvatarModule} from "../avatar/avatar.module";
 
 const routes: Routes = [
     {path: 'gallery', component: GalleryComponent, canActivate: [AuthGuard]}
@@ -19,6 +20,8 @@ const routes: Routes = [
         GalleryComponent
     ],
     imports: [
+        AvatarModule,
+
         CommonModule,
         FormsModule,
         MaterialModule.forRoot(),

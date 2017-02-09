@@ -2,7 +2,7 @@
   height: 100%;
 
   .picker {
-    min-height: 100%;
+    height: calc(100% - 64px);
 
     .picker-gender {
       padding: 12px 0;
@@ -83,6 +83,7 @@
   .output {
     background-color: rgba(0,0,0,.1);
 
+    /*
     #avatar {
       width: 60vh;
       height: 60vh;
@@ -102,6 +103,11 @@
         width: 60vh;
         height: 60vh;
       }
+    }
+    */
+    .avatar-component {
+      height: 512px;
+      width: 512px;
     }
 
     #avatar-actions {

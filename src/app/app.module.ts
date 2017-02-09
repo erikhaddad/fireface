@@ -17,6 +17,8 @@ import {SignInModule} from '../sign-in/sign-in.module';
 
 import {AppComponent} from './app.component';
 import {AppHeaderComponent} from '../app-header/app-header.component';
+import {AvatarComponent} from "../avatar/avatar.component";
+import {AvatarModule} from "../avatar/avatar.module";
 
 @NgModule({
     declarations: [
@@ -34,6 +36,7 @@ import {AppHeaderComponent} from '../app-header/app-header.component';
         AuthModule,
         FirebaseModule,
 
+        AvatarModule,
         CreateModule,
         GalleryModule,
         LandingModule,

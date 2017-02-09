@@ -19,6 +19,7 @@ export class GalleryComponent implements OnInit {
         this.userAvatars = avatarService.userAvatars;
 
         console.log('all avatars', this.publicAvatars);
+        console.log('user avatars', this.userAvatars);
     }
 
     ngOnInit() {}

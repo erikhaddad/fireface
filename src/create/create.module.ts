@@ -8,7 +8,9 @@ import {FlexLayoutModule} from "@angular/flex-layout";
 import {AuthGuard} from '../auth/auth.module';
 
 import {CreateComponent} from './create.component';
+import {AssetService} from '../common/asset.service';
 import {AvatarService} from '../common/avatar.service';
+import {AvatarModule} from "../avatar/avatar.module";
 
 const routes: Routes = [
     {path: 'create', component: CreateComponent, canActivate: [AuthGuard]}
@@ -19,6 +21,8 @@ const routes: Routes = [
         CreateComponent
     ],
     imports: [
+        AvatarModule,
+
         CommonModule,
         FormsModule,
         MaterialModule.forRoot(),
@@ -26,6 +30,7 @@ const routes: Routes = [
         RouterModule.forChild(routes)
     ],
     providers: [
+        AssetService,
         AvatarService
     ]
 })
@@ -33,4 +38,5 @@ const routes: Routes = [
 export class CreateModule {
 }
 
+export {AssetService};
 export {AvatarService};

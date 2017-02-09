@@ -6,7 +6,6 @@ import {AngularFire, FirebaseListObservable} from 'angularfire2';
 import {AuthService} from '../auth/auth.service';
 import {IAvatar, Avatar} from './avatar.model';
 
-
 @Injectable()
 export class AvatarService {
     private _publicAvatars$: FirebaseListObservable<IAvatar[]>;
