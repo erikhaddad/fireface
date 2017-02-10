@@ -7,6 +7,7 @@ import {FlexLayoutModule} from "@angular/flex-layout";
 
 import {LandingComponent} from './landing.component';
 import {AvatarService} from '../common/avatar.service';
+import {AvatarModule} from "../avatar/avatar.module";
 
 const routes: Routes = [
     {path: '',   redirectTo: '/landing', pathMatch: 'full'},
@@ -18,6 +19,8 @@ const routes: Routes = [
         LandingComponent
     ],
     imports: [
+        AvatarModule,
+
         CommonModule,
         FormsModule,
         MaterialModule.forRoot(),

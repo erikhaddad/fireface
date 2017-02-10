@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import * as _ from "lodash";
+import {Avatar} from "./avatar.model";
 
 export interface IColor {
     title: string,
@@ -19,6 +20,8 @@ export interface IAssets {
 
 @Injectable()
 export class AssetService {
+
+    private _genders = ["male", "female"];
 
     private _colors: IColor[] = [
         {
@@ -274,6 +277,38 @@ export class AssetService {
         this._assetKeys = _.keys(this._sets);
     }
 
+    getRandomAvatar(gender?:string): Avatar {
+        if (typeof gender === 'undefined') {
+            gender = this.genders[this.randIndex(this.genders)];
+        }
+
+        let randomAvatar = new Avatar();
+
+        randomAvatar.color = this.colors[this.randIndex(this.colors)].value;
+
+        for (let k = 0; k < this.assetKeys.length; k++) {
+            let key = this.assetKeys[k];
+            randomAvatar[key] = this.randomAsset(this.sets[key][gender]);
+        }
+
+        return randomAvatar;
+    }
+
+    private randomAsset(list): void {
+        return list[this.randIndex(list)];
+    }
+    private randIndex(list): number {
+        return Math.floor(Math.random() * list.length);
+    }
+
+
+    get genders(): (string|string)[] {
+        return this._genders;
+    }
+
+    set genders(value: (string|string)[]) {
+        this._genders = value;
+    }
 
     get colors(): IColor[] {
         return this._colors;
