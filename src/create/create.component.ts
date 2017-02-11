@@ -60,7 +60,7 @@ export class CreateComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log('attempting to load avatar id', this.route.params);
+        //console.log('attempting to load avatar id', this.route.params);
         this.route.params
             .switchMap((params: Params) => this.avatarService.getPublicAvatar(params['id']))
             .subscribe((avatar: Avatar) => {
@@ -113,7 +113,39 @@ export class CreateComponent implements OnInit {
         this.avatarService.createPublicAvatar(this.currentAvatar);
         this.avatarService.createUserAvatar(this.currentAvatar);
 
+        /*
+        let randomName = this.randomString();
+        let storage = firebase.storage();
+        let storageRef = storage.ref();
+        let userImagesRef = storageRef.child('users/'+this.authService.userInfo.uid+'/'+randomName);
 
+        var image = new Image();
+        image.name = randomName;
+        image.src = this.imageData;
+        let uploadTask = userImagesRef.put(this.imageData);
+
+        uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+            function (snapshot) {
+                // Get task progress, including the number of bytes
+                // uploaded and the total number of bytes to be uploaded
+                let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');
+                switch (snapshot.state) {
+                    case firebase.storage.TaskState.PAUSED: // or 'paused'
+                        console.info('Upload is paused');
+                        break;
+                    case firebase.storage.TaskState.RUNNING: // or 'running'
+                        console.info('Upload is running');
+                        break;
+                }
+            }, function (error) {
+                // Upload failed
+                console.error(error);
+            }, function () {
+                // Upload completed successfully
+                console.log('Upload was successful');
+            });
+        */
     }
 
     addAssetRandom(key, list): void {
@@ -141,5 +173,28 @@ export class CreateComponent implements OnInit {
 
             this.renderRandom();
         }
+    }
+    /**
+     * RANDOM STRING GENERATOR
+     *
+     * Info:      http://stackoverflow.com/a/27872144/383904
+     * Use:       randomString(length [,"A"] [,"N"] );
+     * Default:   return a random alpha-numeric string
+     * Arguments: If you use the optional "A", "N" flags:
+     *            "A" (Alpha flag)   return random a-Z string
+     *            "N" (Numeric flag) return random 0-9 string
+     */
+    private randomString(len?:number, an?:string) {
+        if (typeof len === 'undefined') {
+            len = 17;
+        }
+
+        an = an&&an.toLowerCase();
+        let str="", i=0, min=an=="a"?10:0, max=an=="n"?10:62;
+        for(;i++<len;){
+            let r = Math.random()*(max-min)+min <<0;
+            str += String.fromCharCode(r+=r>9?r<36?55:61:48);
+        }
+        return str;
     }
 }

@@ -40,8 +40,6 @@ export class AppComponent {
         iconRegistry.addSvgIcon(
             'avatar_anonymous',
             sanitizer.bypassSecurityTrustResourceUrl('assets/icons/avatar_anonymous.svg'));
-
-        console.log('current userInfo: ', auth.userInfo);
     }
 
     signOut(message: string): void {
