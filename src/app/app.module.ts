@@ -31,7 +31,7 @@ import {AvatarModule} from "../avatar/avatar.module";
         HttpModule,
         RouterModule.forRoot([], {useHash: false}),
         MaterialModule.forRoot(),
-        FlexLayoutModule.forRoot(),
+        FlexLayoutModule,
 
         AuthModule,
         FirebaseModule,
