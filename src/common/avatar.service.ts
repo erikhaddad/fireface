@@ -23,7 +23,11 @@ export class AvatarService {
         });
 
         this.userAvatarsPath = `/users/${auth.id}/avatars`;
-        this._userAvatars$ = this.af.database.list(this.userAvatarsPath);
+        this._userAvatars$ = this.af.database.list(this.userAvatarsPath, {
+            query: {
+                orderByChild: 'createdAt'
+            }
+        });
     }
 
 
