@@ -43,7 +43,6 @@ export class AppComponent {
     }
 
     signOut(message: string): void {
-        console.log('output data', message);
         this.auth.signOut();
         this.router.navigate(['/landing']);
 

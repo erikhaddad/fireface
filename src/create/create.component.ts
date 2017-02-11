@@ -107,8 +107,6 @@ export class CreateComponent implements OnInit {
         this.currentAvatar.name = this.authService.userInfo.displayName;
         this.currentAvatar.createdAt = firebase.database.ServerValue.TIMESTAMP;
 
-        console.log('pre upload', this.currentAvatar);
-
         // For demo, upload all to public, user-specific, and Firebase storage
         this.avatarService.createPublicAvatar(this.currentAvatar);
         this.avatarService.createUserAvatar(this.currentAvatar);
