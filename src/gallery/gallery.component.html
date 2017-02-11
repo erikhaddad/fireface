@@ -5,7 +5,7 @@
     <div class="avatars-grid" *ngIf="publicAvatars && publicAvatars.length > 0">
       <md-grid-list cols="3" rowHeight="240px" gutterSize="12px">
         <md-grid-tile *ngFor="let avatar of publicAvatars" colspan="1" rowspan="1">
-          <a [href]="'create/'+avatar.$key">
+          <a [href]="'create/'+avatar.$key" [mdTooltip]="avatar.name">
             <avatar [model]="avatar"></avatar>
           </a>
         </md-grid-tile>

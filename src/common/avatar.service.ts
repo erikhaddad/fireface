@@ -49,7 +49,6 @@ export class AvatarService {
     removePublicAvatar(avatar: IAvatar): firebase.Promise<any> {
         return this._publicAvatars$.remove(avatar.$key);
     }
-
     updatePublicAvatar(avatar: IAvatar, changes: any): firebase.Promise<any> {
         return this._publicAvatars$.update(avatar.$key, changes);
     }
@@ -58,11 +57,12 @@ export class AvatarService {
     createUserAvatar(avatar:Avatar): firebase.Promise<any> {
         return this._userAvatars$.push(avatar);
     }
-
+    getUserAvatar(id: string): FirebaseObjectObservable<any> {
+        return this.af.database.object(this.userAvatarsPath+'/'+id);
+    }
     removeUserAvatar(avatar: IAvatar): firebase.Promise<any> {
         return this._userAvatars$.remove(avatar.$key);
     }
-
     updateUserAvatar(avatar: IAvatar, changes: any): firebase.Promise<any> {
         return this._userAvatars$.update(avatar.$key, changes);
     }

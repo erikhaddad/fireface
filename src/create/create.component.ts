@@ -97,15 +97,14 @@ export class CreateComponent implements OnInit {
                 html2canvas(document.getElementById('avatar'))
                     .then(function (canvas) {
                         (document.getElementById('save') as HTMLAnchorElement).href = that.imageData = canvas.toDataURL('image/png');
-
-                        //console.log('new image data', that.image);
                     });
             }, 2000);
         }
     }
 
     uploadAvatar(): void {
-        this.currentAvatar.author = this.authService.userInfo.displayName;
+        this.currentAvatar.author = this.authService.userInfo.uid;
+        this.currentAvatar.name = this.authService.userInfo.displayName;
         this.currentAvatar.createdAt = firebase.database.ServerValue.TIMESTAMP;
 
         console.log('pre upload', this.currentAvatar);
@@ -113,6 +112,8 @@ export class CreateComponent implements OnInit {
         // For demo, upload all to public, user-specific, and Firebase storage
         this.avatarService.createPublicAvatar(this.currentAvatar);
         this.avatarService.createUserAvatar(this.currentAvatar);
+
+
     }
 
     addAssetRandom(key, list): void {

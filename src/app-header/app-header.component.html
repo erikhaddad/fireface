@@ -18,7 +18,7 @@
 
     <!-- USER IS SIGNED IN -->
     <div class="user-active" *ngSwitchCase="true" fxLayout="row" fxLayoutAlign="end center">
-      <a md-icon-button href="/gallery">
+      <a md-icon-button href="/gallery" mdTooltip="Gallery">
         <md-icon>apps</md-icon>
       </a>
       <img class="user-image" [src]="userInfo.photoURL" [mdTooltip]="userInfo.displayName" mdTooltipPosition="below" />
