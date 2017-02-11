@@ -108,6 +108,10 @@
     .avatar-component {
       height: 512px;
       width: 512px;
+
+      div.avatar-color {
+        border-radius: 256px;
+      }
     }
 
     #avatar-actions {

@@ -7,6 +7,7 @@ import 'rxjs/add/observable/throw';
 import {Avatar} from "../common/avatar.model";
 import {AssetService, IColor} from "../common/asset.service";
 import {AvatarService} from "../common/avatar.service";
+import {ActivatedRoute, Router, Params} from "@angular/router";
 
 @Component({
     selector: 'create-root',
@@ -31,6 +32,8 @@ export class CreateComponent implements OnInit {
     colors: IColor[];
 
     constructor(iconRegistry: MdIconRegistry,
+                private route: ActivatedRoute,
+                private router: Router,
                 private sanitizer: DomSanitizer,
                 private assetService: AssetService,
                 private avatarService: AvatarService) {
@@ -63,8 +66,16 @@ export class CreateComponent implements OnInit {
         }
         */
 
-        // SETS random values
-        this.renderRandom();
+        console.log('attempting to load avatar id', this.route.params['id']);
+        if (typeof this.route.params['id'] !== 'undefined') {
+            console.log('loading avatar id', this.route.params['id']);
+            this.route.params
+                .switchMap((params: Params) => this.avatarService.getPublicAvatar(params['id']))
+                .subscribe((avatar: Avatar) => this.currentAvatar = avatar);
+        } else {
+            // SETS random values
+            this.renderRandom();
+        }
     }
 
     setConfigValue(key:string, val:string|null) {
