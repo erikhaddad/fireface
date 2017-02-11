@@ -16,7 +16,11 @@ export class AvatarService {
 
     constructor(private af: AngularFire, auth: AuthService) {
         this.publicAvatarsPath = `/avatars`;
-        this._publicAvatars$ = this.af.database.list(this.publicAvatarsPath);
+        this._publicAvatars$ = this.af.database.list(this.publicAvatarsPath, {
+            query: {
+                orderByChild: 'createdAt'
+            }
+        });
 
         this.userAvatarsPath = `/users/${auth.id}/avatars`;
         this._userAvatars$ = this.af.database.list(this.userAvatarsPath);

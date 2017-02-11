@@ -23,4 +23,10 @@ export class GalleryComponent implements OnInit {
     }
 
     ngOnInit() {}
+
+    getSortedAvatars() {
+        return this.publicAvatars.map(avatars => {
+            return avatars.reverse();
+        });
+    }
 }

@@ -1,7 +1,7 @@
 export interface IAvatar {
     $key?: string;
 
-    createdAt: number;
+    createdAt: number|Object;
     author: string;
     image?: string;
 
@@ -18,7 +18,7 @@ export interface IAvatar {
 }
 
 export class Avatar implements IAvatar {
-    createdAt: number;
+    createdAt: number|Object;
     author: string;
     image: string;
 
@@ -34,7 +34,7 @@ export class Avatar implements IAvatar {
     ears: string;
 
     constructor() {
-        //this._createdAt = firebase.database()['ServerValue']['TIMESTAMP'];
-        this.createdAt = +new Date();
+        //this.createdAt = +new Date();
+        //this.createdAt = firebase.database.ServerValue.TIMESTAMP;
     }
 }

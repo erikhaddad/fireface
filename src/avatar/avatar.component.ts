@@ -16,6 +16,7 @@ export class AvatarComponent implements OnInit, OnChanges {
     @Input() model: Avatar;
     @Output() image: EventEmitter<any> = new EventEmitter();
 
+    useCanvas: boolean;
     imageData: string;
 
     setsKeys: string[];
@@ -24,6 +25,7 @@ export class AvatarComponent implements OnInit, OnChanges {
     constructor(private assetService:AssetService) {
         this.setsKeys = this.assetService.assetKeys;
 
+        this.useCanvas = false;
         this.intervalPromise = null;
         this.imageData = "#";
     }
@@ -37,9 +39,9 @@ export class AvatarComponent implements OnInit, OnChanges {
     }
 
     updateImageData(): void {
-        console.log('state of avatar', this.model);
+        //console.log('state of avatar', this.model);
 
-        if (typeof html2canvas !== 'undefined') {
+        if (this.useCanvas && typeof html2canvas !== 'undefined') {
             let that = this;
             setTimeout(function () {
                 html2canvas(document.getElementById('avatar'))

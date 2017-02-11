@@ -8,6 +8,9 @@ import {Avatar} from "../common/avatar.model";
 import {AssetService, IColor} from "../common/asset.service";
 import {AvatarService} from "../common/avatar.service";
 import {ActivatedRoute, Router, Params} from "@angular/router";
+import {AuthService} from "../auth/auth.service";
+
+import * as firebase from 'firebase';
 
 @Component({
     selector: 'create-root',
@@ -35,6 +38,7 @@ export class CreateComponent implements OnInit {
                 private route: ActivatedRoute,
                 private router: Router,
                 private sanitizer: DomSanitizer,
+                private authService: AuthService,
                 private assetService: AssetService,
                 private avatarService: AvatarService) {
         this.currentAvatar = new Avatar();
@@ -56,26 +60,17 @@ export class CreateComponent implements OnInit {
     }
 
     ngOnInit() {
-        /*
-        // SETS defaults
-        for (let k = 0; k < this.setsKeys.length; k++) {
-            let key = this.setsKeys[k];
-            let value = this.sets[key][this.selectedGender][0];
-
-            this.setConfigValue(key, value);
-        }
-        */
-
-        console.log('attempting to load avatar id', this.route.params['id']);
-        if (typeof this.route.params['id'] !== 'undefined') {
-            console.log('loading avatar id', this.route.params['id']);
-            this.route.params
-                .switchMap((params: Params) => this.avatarService.getPublicAvatar(params['id']))
-                .subscribe((avatar: Avatar) => this.currentAvatar = avatar);
-        } else {
-            // SETS random values
-            this.renderRandom();
-        }
+        console.log('attempting to load avatar id', this.route.params);
+        this.route.params
+            .switchMap((params: Params) => this.avatarService.getPublicAvatar(params['id']))
+            .subscribe((avatar: Avatar) => {
+                if (typeof avatar.createdAt !== 'undefined') {
+                    this.currentAvatar = avatar;
+                } else {
+                    // SETS random values
+                    this.renderRandom();
+                }
+            });
     }
 
     setConfigValue(key:string, val:string|null) {
@@ -96,8 +91,6 @@ export class CreateComponent implements OnInit {
     }
 
     updateImageData(): void {
-        console.log('state of currentAvatar', this.currentAvatar);
-
         if (typeof html2canvas !== 'undefined') {
             let that = this;
             setTimeout(function () {
@@ -112,6 +105,11 @@ export class CreateComponent implements OnInit {
     }
 
     uploadAvatar(): void {
+        this.currentAvatar.author = this.authService.userInfo.displayName;
+        this.currentAvatar.createdAt = firebase.database.ServerValue.TIMESTAMP;
+
+        console.log('pre upload', this.currentAvatar);
+
         // For demo, upload all to public, user-specific, and Firebase storage
         this.avatarService.createPublicAvatar(this.currentAvatar);
         this.avatarService.createUserAvatar(this.currentAvatar);
