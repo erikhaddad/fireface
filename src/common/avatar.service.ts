@@ -2,7 +2,7 @@ import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/switchMap';
 
 import {Injectable} from '@angular/core';
-import {AngularFire, FirebaseListObservable} from 'angularfire2';
+import {AngularFire, FirebaseListObservable, FirebaseObjectObservable} from 'angularfire2';
 import {AuthService} from '../auth/auth.service';
 import {IAvatar, Avatar} from './avatar.model';
 
@@ -11,12 +11,23 @@ export class AvatarService {
     private _publicAvatars$: FirebaseListObservable<IAvatar[]>;
     private _userAvatars$: FirebaseListObservable<IAvatar[]>;
 
-    constructor(af: AngularFire, auth: AuthService) {
-        const publicAvatarsPath = `/avatars`;
-        this._publicAvatars$ = af.database.list(publicAvatarsPath);
+    private publicAvatarsPath;
+    private userAvatarsPath;
 
-        const userAvatarsPath = `/users/${auth.id}/avatars`;
-        this._userAvatars$ = af.database.list(userAvatarsPath);
+    constructor(private af: AngularFire, auth: AuthService) {
+        this.publicAvatarsPath = `/avatars`;
+        this._publicAvatars$ = this.af.database.list(this.publicAvatarsPath, {
+            query: {
+                orderByChild: 'createdAt'
+            }
+        });
+
+        this.userAvatarsPath = `/users/${auth.id}/avatars`;
+        this._userAvatars$ = this.af.database.list(this.userAvatarsPath, {
+            query: {
+                orderByChild: 'createdAt'
+            }
+        });
     }
 
 
@@ -32,11 +43,12 @@ export class AvatarService {
     createPublicAvatar(avatar:Avatar): firebase.Promise<any> {
         return this._publicAvatars$.push(avatar);
     }
-
+    getPublicAvatar(id: string): FirebaseObjectObservable<any> {
+        return this.af.database.object(this.publicAvatarsPath+'/'+id);
+    }
     removePublicAvatar(avatar: IAvatar): firebase.Promise<any> {
         return this._publicAvatars$.remove(avatar.$key);
     }
-
     updatePublicAvatar(avatar: IAvatar, changes: any): firebase.Promise<any> {
         return this._publicAvatars$.update(avatar.$key, changes);
     }
@@ -45,11 +57,12 @@ export class AvatarService {
     createUserAvatar(avatar:Avatar): firebase.Promise<any> {
         return this._userAvatars$.push(avatar);
     }
-
+    getUserAvatar(id: string): FirebaseObjectObservable<any> {
+        return this.af.database.object(this.userAvatarsPath+'/'+id);
+    }
     removeUserAvatar(avatar: IAvatar): firebase.Promise<any> {
         return this._userAvatars$.remove(avatar.$key);
     }
-
     updateUserAvatar(avatar: IAvatar, changes: any): firebase.Promise<any> {
         return this._userAvatars$.update(avatar.$key, changes);
     }

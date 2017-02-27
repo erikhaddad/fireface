@@ -63,6 +63,7 @@
                 height: 100%;
                 width: 100%;
               }
+
               &.asset-icon-none {
                 height: 24px;
                 width: 24px;
@@ -83,31 +84,13 @@
   .output {
     background-color: rgba(0,0,0,.1);
 
-    /*
-    #avatar {
-      width: 60vh;
-      height: 60vh;
-      position: relative;
-
-      div.avatar-color,
-      div.avatar-asset {
-        width: 60vh;
-        height: 60vh;
-        border-radius: 30vh;
-      }
-
-      img.avatar-image {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 60vh;
-        height: 60vh;
-      }
-    }
-    */
     .avatar-component {
       height: 512px;
       width: 512px;
+
+      div.avatar-color {
+        border-radius: 256px;
+      }
     }
 
     #avatar-actions {

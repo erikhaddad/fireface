@@ -13,7 +13,8 @@ import {AvatarService} from '../common/avatar.service';
 import {AvatarModule} from "../avatar/avatar.module";
 
 const routes: Routes = [
-    {path: 'create', component: CreateComponent, canActivate: [AuthGuard]}
+    {path: 'create', component: CreateComponent, canActivate: [AuthGuard]},
+    {path: 'create/:id', component: CreateComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({

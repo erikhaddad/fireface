@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewEncapsulation, Input} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {FirebaseListObservable} from 'angularfire2';
-import {IAvatar} from '../common/avatar.model';
+import {IAvatar, Avatar} from '../common/avatar.model';
 import {AvatarService} from '../common/avatar.service';
 
 @Component({
@@ -11,15 +11,16 @@ import {AvatarService} from '../common/avatar.service';
     encapsulation: ViewEncapsulation.None
 })
 export class GalleryComponent implements OnInit {
-    publicAvatars: FirebaseListObservable<IAvatar[]>;
-    userAvatars: FirebaseListObservable<IAvatar[]>;
+    publicAvatars: IAvatar[] = [];
+    userAvatars: IAvatar[];
 
     constructor(avatarService: AvatarService) {
-        this.publicAvatars = avatarService.publicAvatars;
-        this.userAvatars = avatarService.userAvatars;
-
-        console.log('all avatars', this.publicAvatars);
-        console.log('user avatars', this.userAvatars);
+        avatarService.publicAvatars.subscribe(queriedItems => {
+            this.publicAvatars = queriedItems.reverse();
+        });
+        avatarService.userAvatars.subscribe(queriedItems => {
+            this.userAvatars = queriedItems.reverse();
+        });
     }
 
     ngOnInit() {}
