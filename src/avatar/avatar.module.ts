@@ -14,7 +14,7 @@ import {AvatarComponent} from "./avatar.component";
         CommonModule,
         FormsModule,
         MaterialModule.forRoot(),
-        FlexLayoutModule.forRoot()
+        FlexLayoutModule
     ],
     exports: [
         AvatarComponent

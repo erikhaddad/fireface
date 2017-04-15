@@ -24,7 +24,7 @@ const routes: Routes = [
         CommonModule,
         FormsModule,
         MaterialModule.forRoot(),
-        FlexLayoutModule.forRoot(),
+        FlexLayoutModule,
         RouterModule.forChild(routes)
     ],
     providers: [
